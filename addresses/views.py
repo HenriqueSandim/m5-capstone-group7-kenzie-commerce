@@ -1,3 +1,25 @@
-from django.shortcuts import render
+from .models import Address
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .serializer import AddressSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework import generics
 
-# Create your views here.
+class AdressView(generics.ListCreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(user_id=self.request.user.id)
+
+class AddressDetailView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = []
+
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+
+    lookup_url_kwarg = "pk"
+
