@@ -6,8 +6,6 @@ class AddressSerializer(serializers.ModelSerializer):
         for key, value in validated_data.items():
             setattr(instance, key, value)
 
-        instance.set_password(validated_data["password"])
-
         instance.save()
 
         return instance
