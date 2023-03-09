@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 
-class Adress(models.Model):
+class Address(models.Model):
     id = models.UUIDField(
         primary_key=True, 
         default=uuid.uuid4, 
