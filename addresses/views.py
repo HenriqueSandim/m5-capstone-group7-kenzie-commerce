@@ -1,6 +1,7 @@
 from .models import Address
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializer import AddressSerializer
+from .permissions import IsAddressOwner
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import generics
 
@@ -16,7 +17,7 @@ class AdressView(generics.ListCreateAPIView):
 
 class AddressDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = []
+    permission_classes = [IsAddressOwner]
 
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
