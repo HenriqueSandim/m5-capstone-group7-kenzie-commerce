@@ -28,6 +28,9 @@ class User(AbstractUser):
         max_length=30
     )
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
     # address = models.OneToOneField(
     #     "addresses.Addresses",
     #     on_delete=models.CASCADE
