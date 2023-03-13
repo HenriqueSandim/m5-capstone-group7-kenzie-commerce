@@ -5,7 +5,7 @@ from .permissions import IsAddressOwner
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import generics
 
-class AdressView(generics.ListCreateAPIView):
+class AddressView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
