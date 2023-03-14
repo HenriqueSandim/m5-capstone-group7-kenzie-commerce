@@ -22,4 +22,4 @@ class Cart_products(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     quantity = models.IntegerField()
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey("products.Product", on_delete=models.CASCADEa)
+    product = models.ForeignKey("products.Product", on_delete=models.CASCADE)

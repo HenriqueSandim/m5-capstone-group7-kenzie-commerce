@@ -1,21 +1,26 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from .models import Order, OrderProducts
-from carts.models import Cart
+
 
 class OrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict) -> Order:
-        cart = get_object_or_404(Cart, user_id=validated_data.user_id)
+        cart = validated_data["user"].cart
 
-        validated_data["total_price"] = cart["total_price"]
+        validated_data["total_price"] = cart.total_price
     
-        products_list = cart.pop("products")
-
-        for product_dict in products_list:
-            validated_data.products.add(product_dict)
+        validated_data["products"] = cart.products
 
         return Order.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        
+        instance.save()
+
+        return instance
     
 
     class Meta:
