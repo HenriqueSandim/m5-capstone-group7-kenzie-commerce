@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 
+
 class StatusOptions(models.TextChoices):
     DEFAULT = "Pedido realizado"
     EM_ANDAMENTO = "Em andamento"
@@ -14,7 +15,11 @@ class Order(models.Model):
         editable=False) 
     order_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=5, decimal_places=2)
-    status = models.CharField(max_length=30, default=StatusOptions.DEFAULT, choices=StatusOptions.choices)
+    status = models.CharField(
+        max_length=30,
+        default=StatusOptions.DEFAULT,
+        choices=StatusOptions.choices
+    )
 
     user = models.ForeignKey(
         "users.User",
@@ -50,5 +55,3 @@ class OrderProducts(models.Model):
 
     def __str__(self) -> str:
         return f"<ProductOrder [{self.id}] - {self.quantity}>"
-
-

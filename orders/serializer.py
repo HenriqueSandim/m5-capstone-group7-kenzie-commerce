@@ -3,6 +3,7 @@ from .models import Order, OrderProducts
 from django.core.mail import send_mail
 from django.conf import settings
 
+
 class OrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict) -> Order:
@@ -42,5 +43,3 @@ class OrderProductsSerializer(serializers.ModelSerializer):
         model = OrderProducts
         fields = ["id", "quantity", "order", "product"]
         depth = 1
-
-    
