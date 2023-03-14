@@ -36,10 +36,13 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        if validated_data["user_type"] == "Cliente":
-            validated_data["is_staff"] = False
-        else:
-            validated_data["is_staff"] = True
+        match validated_data["user_type"]:
+            case "Cliente":
+                validated_data["is_staff"] = False
+            case "Vendedor":
+                validated_data["is_staff"] = True
+            case "Administrador":
+                validated_data["is_superuser"] = True
 
         address_infos = validated_data.pop("address")
         serialized_address = AddressSerializer(data=address_infos)
