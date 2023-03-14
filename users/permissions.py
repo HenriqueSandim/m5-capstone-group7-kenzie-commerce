@@ -17,9 +17,10 @@ class IsObjOwner(BasePermission):
         )
 
 
-class IsSeller(BasePermission):
+class IsSellerAdminOrReadOnly(BasePermission):
     def has_permission(self, request, view):
         return bool(
-            request.user.is_staff
+            request.method == "GET"
+            or request.user.is_staff
             or request.user.is_superuser
         )
