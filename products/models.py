@@ -9,6 +9,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     description = models.TextField()
     inventory = models.IntegerField()
+    is_avaliable = models.BooleanField(default=True)
     
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="products"

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Order, OrderProducts
 
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -13,5 +14,3 @@ class OrderProductsSerializer(serializers.ModelSerializer):
         model = OrderProducts
         fields = ["id", "quantity", "order", "product"]
         depth = 1
-
-    

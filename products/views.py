@@ -1,3 +1,5 @@
+from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -13,6 +15,9 @@ from .serializer import ProductSerializer
 class ProductView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["name", "category"]
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsSellerAdminOrReadOnly]

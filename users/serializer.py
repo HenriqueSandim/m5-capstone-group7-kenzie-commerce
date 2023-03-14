@@ -51,8 +51,10 @@ class UserSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
     def update(self, instance: User, validated_data: dict):
-        if validated_data.get("password"):
-            instance.set_password(validated_data["password"])
+
+        update_password = validated_data.pop("password")
+        if update_password:
+            instance.set_password(update_password)
 
         if validated_data.get("user_type"):
             if validated_data["user_type"] == "Cliente":
