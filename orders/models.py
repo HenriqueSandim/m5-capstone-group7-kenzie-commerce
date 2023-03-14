@@ -10,16 +10,21 @@ class StatusOptions(models.TextChoices):
 
 class Order(models.Model):
     id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    order_at = models.DateTimeField()
+        primary_key=True, 
+        default=uuid.uuid4, 
+        editable=False) 
+    order_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=5, decimal_places=2)
     status = models.CharField(
         max_length=30,
         default=StatusOptions.DEFAULT,
         choices=StatusOptions.choices
+    )
+
+    user = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        related_name="orders"
     )
 
     products = models.ManyToManyField(
