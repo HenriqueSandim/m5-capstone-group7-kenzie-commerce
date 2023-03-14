@@ -1,5 +1,10 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from users.permissions import IsAdminOrOwner, IsSellerAdminOrReadOnly
 
 from .models import Product
 from .serializer import ProductSerializer
@@ -10,7 +15,14 @@ class ProductView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = []
+    permission_classes = [IsSellerAdminOrReadOnly]
+
+    def post(self, request, *args, **kwargs):
+        serialized = ProductSerializer(data=request.data)
+        serialized.is_valid(raise_exception=True)
+        serialized.save(user=request.user)
+
+        return Response(serialized.data, status.HTTP_201_CREATED)
 
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -18,6 +30,6 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminOrOwner]
 
     lookup_url_kwarg = "product_id"
