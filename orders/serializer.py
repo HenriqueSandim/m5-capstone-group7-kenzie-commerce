@@ -1,7 +1,7 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from .models import Order, OrderProducts
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 class OrderSerializer(serializers.ModelSerializer):
 
@@ -19,6 +19,14 @@ class OrderSerializer(serializers.ModelSerializer):
             setattr(instance, key, value)
         
         instance.save()
+
+        send_mail(
+            subject = 'Status do seu pedido de compra',
+            message = f'Seu pedido foi atualizado pelo vendedor, o status do pedido é {validated_data["status"]}',
+            from_email = settings.EMAIL_HOST_USER,
+            recipient_list = [f'{validated_data["user"].email}'],
+            fail_silently = False
+        )
 
         return instance
     

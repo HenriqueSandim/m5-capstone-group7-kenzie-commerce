@@ -23,3 +23,5 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     lookup_url_kwarg = "pk"
 
+    def perform_update(self, serializer):
+        return serializer.save(user=self.request.user)
