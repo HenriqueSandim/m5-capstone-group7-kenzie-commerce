@@ -30,9 +30,3 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-
-    address = models.OneToOneField(
-        "addresses.Address",
-        on_delete=models.CASCADE,
-        default=None
-    )

@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 
+
 class Address(models.Model):
     id = models.UUIDField(
         primary_key=True, 
@@ -13,3 +14,9 @@ class Address(models.Model):
     neighborhood = models.CharField(max_length=50)
     city = models.CharField(max_length=30)
     state = models.CharField(max_length=20)
+
+    user = models.OneToOneField(
+        "users.User",
+        on_delete=models.CASCADE,
+        related_name="address"
+    )

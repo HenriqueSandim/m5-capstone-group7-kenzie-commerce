@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from django.contrib.auth.hashers import make_password
-
 from .models import User, UserTypeChoice
+
+from addresses.serializer import AddressSerializer
 
 from utils.custom_errors import choices_error_message
 
@@ -34,16 +34,21 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        if validated_data["user_type"] == "Cliente":
-            validated_data["is_staff"] = False
-        else:
-            validated_data["is_staff"] = True
+        match validated_data["user_type"]:
+            case "Cliente":
+                validated_data["is_staff"] = False
+            case "Vendedor":
+                validated_data["is_staff"] = True
+            case "Administrador":
+                validated_data["is_superuser"] = True
 
         return User.objects.create_user(**validated_data)
 
     def update(self, instance: User, validated_data: dict):
-        if validated_data.get("password"):
-            instance.set_password(validated_data["password"])
+
+        update_password = validated_data.pop("password")
+        if update_password:
+            instance.set_password(update_password)
 
         if validated_data.get("user_type"):
             if validated_data["user_type"] == "Cliente":
