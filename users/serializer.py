@@ -9,14 +9,12 @@ from utils.custom_errors import choices_error_message
 
 
 class UserSerializer(serializers.ModelSerializer):
-    address = AddressSerializer(allow_null=False)
-
     class Meta:
         model = User
         fields = [
                     "id", "username", "email", "cpf", "password",
                     "first_name", "last_name", "user_type", "is_staff",
-                    "is_superuser", "is_active", "date_joined", "last_login", "address"
+                    "is_superuser", "is_active", "date_joined", "last_login"
                 ]
         extra_kwargs = {
             "password": {
@@ -43,13 +41,6 @@ class UserSerializer(serializers.ModelSerializer):
                 validated_data["is_staff"] = True
             case "Administrador":
                 validated_data["is_superuser"] = True
-
-        address_infos = validated_data.pop("address")
-        serialized_address = AddressSerializer(data=address_infos)
-        serialized_address.is_valid(raise_exception=True)
-        serialized_address.save()
-
-        validated_data["address"] = serialized_address.instance
 
         return User.objects.create_user(**validated_data)
 

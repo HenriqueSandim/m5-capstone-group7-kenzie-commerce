@@ -1,13 +1,22 @@
 from rest_framework.permissions import BasePermission
 
 
+class IsAdminOrOwnerOrReadOnly(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return bool(
+            request.user.is_superuser
+            or obj.user == request.user
+            or request.method == "GET"
+        )
+
+
 class IsAdminOrOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
         return bool(
             request.user.is_superuser
             or obj == request.user
         )
-    
+
 
 class IsObjOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
