@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from users.permissions import IsAdminOrOwner, IsSellerAdminOrReadOnly
+from users.permissions import IsAdminOrOwner, IsSellerAdminOrReadOnly, IsAdminOrOwnerOrReadOnly
 
 from .models import Product
 from .serializer import ProductSerializer
@@ -35,6 +35,6 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminOrOwner]
+    permission_classes = [IsAdminOrOwnerOrReadOnly]
 
     lookup_url_kwarg = "product_id"
